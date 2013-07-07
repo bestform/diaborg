@@ -1,6 +1,7 @@
 {
     "require": {
         "silex/silex": "~1.0",
-        "twig/twig": "*"
+        "twig/twig": "*",
+        "symfony/class-loader": "2.3.*"
     }
 }
