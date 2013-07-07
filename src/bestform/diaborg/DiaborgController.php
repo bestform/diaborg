@@ -98,7 +98,7 @@ class DiaborgController {
                 "hour" => $request->get("hour"),
                 "minute" => $request->get("minute"),
                 "value" => $request->get("value"),
-                "insuin" => $request->get("insulin"),
+                "insulin" => $request->get("insulin"),
                 "BE" => $request->get("BE")
             );
             $vars = array_merge($vars, $additianalVars);
