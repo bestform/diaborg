@@ -1,0 +1,6 @@
+.controls {
+    visibility: hidden;
+}
+.entry:hover .controls{
+    visibility: visible;
+}

@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Silex\Application();
@@ -23,7 +25,7 @@ $app->get('/', function() use ($app) {
     return $app->redirect('/index.php/list');
     }
 );
-$app->get('/list', function(\Symfony\Component\HttpFoundation\Request $request) use ($data, $app) {
+$app->get('/list', function(Request $request) use ($data, $app) {
         $keys = array_keys($data);
         sort($keys);
         $entries = array();
@@ -33,7 +35,8 @@ $app->get('/list', function(\Symfony\Component\HttpFoundation\Request $request) 
             $entries[] = array(
                 "date" => date('d. m.', $key),
                 "time" => date('H:i', $key),
-                "values" => $data[$key]
+                "values" => $data[$key],
+                "key" => $key
             );
         }
 
@@ -46,8 +49,19 @@ $app->get('/clear', function() use ($app) {
         return $app->redirect('/index.php/list');
     }
 );
+$app->get('/delete', function(Request $request) use ($app, $data) {
+        $key = $request->get("id");
+        if(null !== $key){
+            if(isset($data[$key])){
+                unset($data[$key]);
+                file_put_contents(__DIR__ . '/../data/data.json', json_encode($data));
+            }
+        }
+        return $app->redirect('/index.php/list');
+    }
+);
 
-$app->get('/add', function(\Symfony\Component\HttpFoundation\Request $request) use ($data, $app) {
+$app->get('/add', function(Request $request) use ($data, $app) {
         /** @var Twig_Environment $twig */
         $twig = $app["twig"];
         $content =  $twig->render('form.html.twig', array(
@@ -59,7 +73,7 @@ $app->get('/add', function(\Symfony\Component\HttpFoundation\Request $request) u
     }
 );
 
-$app->post('/add', function(\Symfony\Component\HttpFoundation\Request $request) use ($data, $app) {
+$app->post('/add', function(Request $request) use ($data, $app) {
         $date = new DateTime();
         $date->setDate($request->get("year"), $request->get("month"), $request->get("day"));
         $date->setTime($request->get("hour"), $request->get("minute"));
