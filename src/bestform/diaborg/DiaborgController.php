@@ -76,7 +76,7 @@ class DiaborgController {
         if(null !== $key){
             if(isset($data[$key])){
                 unset($data[$key]);
-                file_put_contents(__DIR__ . '/../data/data.json', json_encode($data));
+                file_put_contents($this->getDataFile(), json_encode($data));
             }
         }
 
@@ -86,31 +86,56 @@ class DiaborgController {
     public function getAdd(Request $request, Application $app)
     {
         $twig = $this->getTwig();
-        $content =  $twig->render('form.html.twig', array(
-            "lastyear" => $request->get("lastyear"),
-            "lastmonth" => $request->get("lastmonth"),
-            "lastday" => $request->get("lastday")
-        ));
+        $vars = array(
+            "year" => $request->get("year"),
+            "month" => $request->get("month"),
+            "day" => $request->get("day")
+        );
+        // we want to render additional fields again, should an error occur
+        if(isset($app['errors'])){
+            $additianalVars = array(
+                "errors" => $app["errors"],
+                "hour" => $request->get("hour"),
+                "minute" => $request->get("minute"),
+                "value" => $request->get("value"),
+                "insuin" => $request->get("insulin"),
+                "BE" => $request->get("BE")
+            );
+            $vars = array_merge($vars, $additianalVars);
+        }
+
+        $content =  $twig->render('form.html.twig', $vars);
 
         return $twig->render('base.html.twig', array('content' => $content));
     }
 
     public function postAdd(Request $request, Application $app)
     {
-        $data = $this->getData();
-        $date = new \DateTime();
-        $date->setDate($request->get("year"), $request->get("month"), $request->get("day"));
-        $date->setTime($request->get("hour"), $request->get("minute"));
-        $entry = array(
-            "value" => $request->get("value"),
-            "insulin" => $request->get("insulin"),
-            "BE" => $request->get("BE"),
-        );
-        $data[$date->getTimestamp()] = $entry;
+        $validator = new DiaborgValidator();
+        $errors = $validator->validateDataForNewEntry($request);
+        if(count($errors) > 0){
+            $apperrors = array();
+            /** @var $error DiaborgValidationError */
+            foreach($errors as $error){
+                $apperrors[$error->getKey()] = $error->getMessage();
+            }
+            $app['errors'] = $apperrors;
+        } else {
+            $data = $this->getData();
+            $date = new \DateTime();
+            $date->setDate($request->get("year"), $request->get("month"), $request->get("day"));
+            $date->setTime($request->get("hour"), $request->get("minute"));
+            $entry = array(
+                "value" => $request->get("value"),
+                "insulin" => $request->get("insulin"),
+                "BE" => $request->get("BE"),
+            );
+            $data[$date->getTimestamp()] = $entry;
 
-        file_put_contents($this->getDataFile(), json_encode($data));
+            file_put_contents($this->getDataFile(), json_encode($data));
+        }
 
-        return $app->redirect('/index.php/add?lastyear='.$request->get('year').'&lastmonth='.$request->get('month').'&lastday='.$request->get('day'));
+        return $this->getAdd($request, $app);
     }
 
 }

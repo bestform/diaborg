@@ -1,23 +1,20 @@
-<form method="POST">
+<form method="POST" class="form-horizontal">
     <fieldset>
         <legend>Add entry</legend>
-        <label >Year</label>
-        <input type="text" name="year" value="{{ lastyear }}" />
-        <label >Month</label>
-        <input type="text" name="month" value="{{ lastmonth }}"  />
-        <label >Day</label>
-        <input type="text" name="day" value="{{ lastday }}"  />
-        <label >Hour</label>
-        <input type="text" name="hour" autofocus="autofocus"/>
-        <label >Minute</label>
-        <input type="text" name="minute" />
-        <label>Value</label>
-        <input type="text" name="value" />
-        <label>Insulin</label>
-        <input type="text" name="insulin" />
-        <label>BE</label>
-        <input type="text" name="BE" />
-        <br />
-        <button type="submit" class="btn">Submit</button>
+
+        {% include 'formfield.html.twig' with {'label' : 'Year', 'id' : 'year', 'value' : year, 'error' : errors.year} %}
+        {% include 'formfield.html.twig' with {'label' : 'Month', 'id' : 'month', 'value' : month, 'error' : errors.month} %}
+        {% include 'formfield.html.twig' with {'label' : 'Day', 'id' : 'day', 'value' : day, 'error' : errors.day} %}
+        {% include 'formfield.html.twig' with {'label' : 'Hour', 'id' : 'hour', 'value' : hour, 'error' : errors.hour, 'autofocus' : true} %}
+        {% include 'formfield.html.twig' with {'label' : 'Minute', 'id' : 'minute', 'value' : minute, 'error' : errors.minute} %}
+        {% include 'formfield.html.twig' with {'label' : 'Value', 'id' : 'value', 'value' : value, 'error' : errors.value} %}
+        {% include 'formfield.html.twig' with {'label' : 'Insulin', 'id' : 'insulin', 'value' : insulin, 'error' : errors.insulin} %}
+        {% include 'formfield.html.twig' with {'label' : 'BE', 'id' : 'BE', 'value' : BE, 'error' : errors.BE} %}
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Submit</button>
+            </div>
+        </div>
     </fieldset>
 </form>

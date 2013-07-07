@@ -1,6 +1,6 @@
-.controls {
+.diaborgcontrols {
     visibility: hidden;
 }
-.entry:hover .controls{
+.entry:hover .diaborgcontrols{
     visibility: visible;
 }
