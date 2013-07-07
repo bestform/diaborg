@@ -1,0 +1,20 @@
+{% set currentdate = "xx" %}
+{% for entry in entries %}
+    <div>
+        {% if currentdate != entry.date %}
+            <hr>
+            <h4 class="text-right"><i class="icon-calendar"></i> {{ entry.date }}</h4>
+            {% set currentdate = entry.date %}
+        {% endif %}
+        <strong><i class="icon-time"></i> {{ entry.time }}</strong>
+        <dl class="dl-horizontal">
+            <dt style="padding-top: 20px"><i class="icon-heart"></i></dt>
+            <dd><h3>{{ entry.values.value }}</h3></dd>
+            <dd></dd>
+            <dt><i class="icon-pencil"></i></dt>
+            <dd>{{ entry.values.insulin }}</dd>
+            <dt><i class="icon-glass"></i></dt>
+            <dd>{{ entry.values.BE }}</dd>
+        </dl>
+    </div>
+{% endfor %}

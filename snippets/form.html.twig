@@ -1,0 +1,23 @@
+<form method="POST">
+    <fieldset>
+        <legend>Add entry</legend>
+        <label >Year</label>
+        <input type="text" name="year" value="{{ lastyear }}" />
+        <label >Month</label>
+        <input type="text" name="month" value="{{ lastmonth }}"  />
+        <label >Day</label>
+        <input type="text" name="day" value="{{ lastday }}"  />
+        <label >Hour</label>
+        <input type="text" name="hour" autofocus="autofocus"/>
+        <label >Minute</label>
+        <input type="text" name="minute" />
+        <label>Value</label>
+        <input type="text" name="value" />
+        <label>Insulin</label>
+        <input type="text" name="insulin" />
+        <label>BE</label>
+        <input type="text" name="BE" />
+        <br />
+        <button type="submit" class="btn">Submit</button>
+    </fieldset>
+</form>

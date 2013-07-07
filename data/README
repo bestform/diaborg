@@ -1,0 +1,3 @@
+This is your data folder.
+Make sure it is writable by your web server.
+Leave this file as it is, so git can commit the folder.
