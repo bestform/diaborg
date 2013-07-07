@@ -130,7 +130,11 @@ class DiaborgController {
                 "insulin" => $request->get("insulin"),
                 "BE" => $request->get("BE"),
             );
-            $data[$date->getTimestamp()] = $entry;
+            $timestamp = $date->getTimestamp();
+            while(isset($data[$timestamp])){
+                $timestamp++;
+            }
+            $data[$timestamp] = $entry;
 
             file_put_contents($this->getDataFile(), json_encode($data));
         }
