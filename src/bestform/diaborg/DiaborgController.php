@@ -64,7 +64,7 @@ class DiaborgController {
     }
 
     public function getClear(Request $request, Application $app){
-        file_put_contents(__DIR__ . '/../data/data.json', '');
+        file_put_contents($this->getDataFile(), '');
 
         return $app->redirect('/index.php/list');
     }

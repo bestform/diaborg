@@ -4,3 +4,11 @@
 .entry:hover .diaborgcontrols{
     visibility: visible;
 }
+
+dt, dd {
+    line-height: 30px;
+}
+
+h3 {
+    margin: 15px 0;
+}
