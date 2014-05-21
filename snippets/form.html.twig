@@ -1,20 +1,29 @@
-<form method="POST" class="form-horizontal">
-    <fieldset>
-        <legend>Add entry</legend>
+<h1>
+    <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
+    Add Entry<small class="on-right"></small>
+</h1>
 
-        {% include 'formfield.html.twig' with {'label' : 'Year', 'id' : 'year', 'value' : year, 'error' : errors.year} %}
-        {% include 'formfield.html.twig' with {'label' : 'Month', 'id' : 'month', 'value' : month, 'error' : errors.month} %}
-        {% include 'formfield.html.twig' with {'label' : 'Day', 'id' : 'day', 'value' : day, 'error' : errors.day} %}
-        {% include 'formfield.html.twig' with {'label' : 'Hour', 'id' : 'hour', 'value' : hour, 'error' : errors.hour, 'autofocus' : true} %}
-        {% include 'formfield.html.twig' with {'label' : 'Minute', 'id' : 'minute', 'value' : minute, 'error' : errors.minute} %}
-        {% include 'formfield.html.twig' with {'label' : 'Value', 'id' : 'value', 'value' : value, 'error' : errors.value} %}
-        {% include 'formfield.html.twig' with {'label' : 'Insulin', 'id' : 'insulin', 'value' : insulin, 'error' : errors.insulin} %}
-        {% include 'formfield.html.twig' with {'label' : 'BE', 'id' : 'BE', 'value' : BE, 'error' : errors.BE} %}
 
-        <div class="control-group">
-            <div class="controls">
-                <button type="submit" class="btn">Submit</button>
+    <form method="POST" >
+        <fieldset>
+
+            {% include 'formfield.html.twig' with {'label' : 'Year', 'id' : 'year', 'value' : year, 'error' : errors.year} %}
+            {% include 'formfield.html.twig' with {'label' : 'Month', 'id' : 'month', 'value' : month, 'error' : errors.month} %}
+            {% include 'formfield.html.twig' with {'label' : 'Day', 'id' : 'day', 'value' : day, 'error' : errors.day} %}
+            {% include 'formfield.html.twig' with {'label' : 'Hour', 'id' : 'hour', 'value' : hour, 'error' : errors.hour, 'autofocus' : true} %}
+            {% include 'formfield.html.twig' with {'label' : 'Minute', 'id' : 'minute', 'value' : minute, 'error' : errors.minute} %}
+            {% include 'formfield.html.twig' with {'label' : 'Value', 'id' : 'value', 'value' : value, 'error' : errors.value} %}
+            {% include 'formfield.html.twig' with {'label' : 'Insulin', 'id' : 'insulin', 'value' : insulin, 'error' : errors.insulin} %}
+            {% include 'formfield.html.twig' with {'label' : 'BE', 'id' : 'BE', 'value' : BE, 'error' : errors.BE} %}
+
+
+            <input type="submit" value="Submit">
+
+
+            <div style="margin-top: 20px">
             </div>
-        </div>
-    </fieldset>
-</form>
+
+        </fieldset>
+    </form>
+
+

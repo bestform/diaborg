@@ -12,3 +12,7 @@ dt, dd {
 h3 {
     margin: 15px 0;
 }
+
+.container {
+    padding: 40px 40px 40px 40px;
+}

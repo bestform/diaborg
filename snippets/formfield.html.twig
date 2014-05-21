@@ -1,7 +1,5 @@
-<div class="control-group {% if error %}error{% endif %}">
-    <label class="control-label" for="{{ id }}">{{ label }}</label>
-    <div class="controls">
-        <input type="text" id="{{ id }}" name="{{ id }}" value="{{ value }}" {% if autofocus %}autofocus="autofocus"{% endif %}/>
-        <span class="help-inline">{{ error }}</span>
-    </div>
+<div class="input-control text {% if error %}error-state{% endif %}" data-role="input-control">
+    <input type="text" id="{{ id }}" name="{{ id }}" value="{{ value }}" {% if autofocus %}autofocus="autofocus"{% endif %} placeholder="{{ label }}">
+    <button class="btn-clear" tabindex="-1" type="button"></button>
+    <span class="help-inline">{{ error }}</span>
 </div>
