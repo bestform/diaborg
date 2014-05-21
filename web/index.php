@@ -9,6 +9,9 @@ $app['debug'] = true;
 $app['repository'] = $app->share(function () {
     return new \bestform\diaborg\data\DiaborgRepositoryJSON();
 });
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__ . '/../snippets',
+));
 
 // routes
 $app->get('/', 'bestform\diaborg\DiaborgController::getRoot');

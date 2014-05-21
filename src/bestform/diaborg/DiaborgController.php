@@ -19,14 +19,6 @@ class DiaborgController {
         return $app['repository'];
     }
 
-    /**
-     * @return \Twig_Environment
-     */
-    private function getTwig()
-    {
-        return new \Twig_Environment(new \Twig_Loader_Filesystem(__DIR__ . '/../../../snippets'));
-    }
-
     public function getRoot(Request $request, Application $app)
     {
         return $app->redirect('/index.php/list');
@@ -37,7 +29,6 @@ class DiaborgController {
         $keys = array_keys($data);
         sort($keys);
         $entries = array();
-        $twig = $this->getTwig();
         foreach($keys as $key){
             $entries[] = array(
                 "date" => date('d. m.', $key),
@@ -47,6 +38,8 @@ class DiaborgController {
             );
         }
 
+        /** @var \Twig_Environment $twig */
+        $twig = $app['twig'];
         $content = $twig->render('list.html.twig', array("entries" => $entries));
 
         return $twig->render('base.html.twig', array('content' => $content, 'print' => $request->get('print') === "1"));
@@ -68,7 +61,6 @@ class DiaborgController {
 
     public function getAdd(Request $request, Application $app)
     {
-        $twig = $this->getTwig();
         $vars = array(
             "year" => $request->get("year"),
             "month" => $request->get("month"),
@@ -87,7 +79,9 @@ class DiaborgController {
             $vars = array_merge($vars, $additianalVars);
         }
 
-        $content =  $twig->render('form.html.twig', $vars);
+        /** @var \Twig_Environment $twig */
+        $twig = $app['twig'];
+        $content = $twig->render('form.html.twig', $vars);
 
         return $twig->render('base.html.twig', array('content' => $content));
     }
