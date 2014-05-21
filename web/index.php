@@ -11,6 +11,9 @@ $app['repository'] = $app->share(function () {
 });
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../snippets',
+    'twig.options' => array(
+        'strict_variables' => false
+    )
 ));
 
 // routes
