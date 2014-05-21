@@ -1,7 +1,12 @@
 {
     "require": {
         "silex/silex": "~1.0",
-        "twig/twig": "*",
-        "symfony/class-loader": "2.3.*"
+        "twig/twig": "*"
+    },
+    "autoload": {
+      "psr-0" : {
+        "bestform\\": "src/"
+      }
     }
+
 }

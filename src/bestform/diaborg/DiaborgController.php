@@ -2,6 +2,7 @@
 
 namespace bestform\diaborg;
 
+use bestform\diaborg\data\DiaborgRepositoryInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,25 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DiaborgController {
 
-    private function getDataDir()
-    {
-        return __DIR__ . '/../../../data';
-    }
 
-    private function getDataFile()
+    /**
+     * @return DiaborgRepositoryInterface
+     */
+    private function getRepository(Application $app)
     {
-        return $this->getDataDir() . '/data.json';
-    }
-
-    private function getData()
-    {
-        $rawdata = file_get_contents($this->getDataFile());
-        $data = json_decode($rawdata, true);
-        if(null === $data){
-            $data = array();
-        }
-
-        return $data;
+        return $app['repository'];
     }
 
     /**
@@ -44,7 +33,7 @@ class DiaborgController {
     }
 
     public function getList(Request $request, Application $app){
-        $data = $this->getData();
+        $data = $this->getRepository($app)->getList();
         $keys = array_keys($data);
         sort($keys);
         $entries = array();
@@ -63,22 +52,16 @@ class DiaborgController {
         return $twig->render('base.html.twig', array('content' => $content, 'print' => $request->get('print') === "1"));
     }
 
-    public function getClear(Request $request, Application $app){
-        file_put_contents($this->getDataFile(), '');
-
+    public function getClear(Request $request, Application $app)
+    {
+        $this->getRepository($app)->clear($app);
         return $app->redirect('/index.php/list');
     }
 
     public function getDelete(Request $request, Application $app)
     {
-        $data = $this->getData();
-        $key = $request->get("id");
-        if(null !== $key){
-            if(isset($data[$key])){
-                unset($data[$key]);
-                file_put_contents($this->getDataFile(), json_encode($data));
-            }
-        }
+        $id = $request->get("id");
+        $this->getRepository($app)->deleteEntry($id);
 
         return $app->redirect('/index.php/list');
     }
@@ -121,22 +104,16 @@ class DiaborgController {
             }
             $app['errors'] = $apperrors;
         } else {
-            $data = $this->getData();
             $date = new \DateTime();
             $date->setDate($request->get("year"), $request->get("month"), $request->get("day"));
             $date->setTime($request->get("hour"), $request->get("minute"));
-            $entry = array(
-                "value" => $request->get("value"),
-                "insulin" => $request->get("insulin"),
-                "BE" => $request->get("BE"),
-            );
             $timestamp = $date->getTimestamp();
-            while(isset($data[$timestamp])){
-                $timestamp++;
-            }
-            $data[$timestamp] = $entry;
-
-            file_put_contents($this->getDataFile(), json_encode($data));
+            $this->getRepository($app)->addEntry(
+                $timestamp,
+                $request->get("value"),
+                $request->get("insulin"),
+                $request->get("BE")
+            );
         }
 
         return $this->getAdd($request, $app);
