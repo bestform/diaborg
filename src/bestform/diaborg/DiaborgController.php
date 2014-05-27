@@ -30,14 +30,18 @@ class DiaborgController {
         sort($keys);
         $entries = array();
         foreach($keys as $key){
-            $entries[] = array(
-                "date" => date('d. m.', $key),
+            $date = date('d. m.', $key);
+            if(!isset($entries[$date])){
+                $entries[$date] = array();
+            }
+            $entries[$date][] = array(
                 "time" => date('H:i', $key),
                 "values" => $data[$key],
                 "key" => $key
             );
         }
 
+        $entries = array_reverse($entries);
         /** @var \Twig_Environment $twig */
         $twig = $app['twig'];
         $content = $twig->render('list.html.twig', array("entries" => $entries));

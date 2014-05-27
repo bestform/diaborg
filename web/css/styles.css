@@ -1,18 +1,7 @@
-.diaborgcontrols {
-    visibility: hidden;
-}
-.entry:hover .diaborgcontrols{
-    visibility: visible;
-}
-
-dt, dd {
-    line-height: 30px;
-}
-
-h3 {
-    margin: 15px 0;
-}
-
 .container {
     padding: 40px 40px 40px 40px;
+}
+
+.metro .bztable, .metro .entryform {
+    max-width: 800px;
 }
