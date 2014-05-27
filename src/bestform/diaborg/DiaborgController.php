@@ -29,16 +29,35 @@ class DiaborgController {
         $keys = array_keys($data);
         sort($keys);
         $entries = array();
+        $id = 0;
+        $grapharray = array();
+        $lastkey = null;
         foreach($keys as $key){
             $date = date('d. m.', $key);
+            $dayId = $id++;
             if(!isset($entries[$date])){
+                if(null !== $lastkey){
+                    $entries[$lastkey]['grapharray'] = json_encode($grapharray);
+                }
+                $grapharray = array();
+                $lastkey = $date;
                 $entries[$date] = array();
+                $entries[$date]['entries'] = array();
+                $entries[$date]['id'] = $dayId;
+                $entries[$date]['date'] = $date;
             }
-            $entries[$date][] = array(
+            $entries[$date]['entries'][] = array(
                 "time" => date('H:i', $key),
                 "values" => $data[$key],
                 "key" => $key
             );
+            if(!empty($data[$key]['value'])){
+                $grapharray[] = array("date"=>date('H:i', $key), "value"=>$data[$key]['value']);
+            }
+
+        }
+        if(null !== $lastkey){
+            $entries[$lastkey]['grapharray'] = json_encode($grapharray);
         }
 
         $entries = array_reverse($entries);

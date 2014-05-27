@@ -1,39 +1,45 @@
-{% set currentdate = "xx" %}
-    {% for date, values in entries %}
-    <table class="table striped bordered hovered bztable">
-        <thead>
-        <tr class="info">
-            <td colspan="5">{{ date }}</td>
-        </tr>
+{% for entry in entries %}
+<table class="table striped bordered hovered bztable">
+    <thead>
+    <tr class="info">
+        <td colspan="5">{{ entry.date }}</td>
+    </tr>
 
-        <tr>
-            <th class="text-left">Time</th>
-            <th class="text-left">Value</th>
-            <th class="text-left">Insulin</th>
-            <th class="text-left">BE</th>
-            <th class="text-right">Edit</th>
-        </tr>
-        </thead>
-        <tbody>
-            {%  for entry in values %}
-                <tr class="">
-                    <td>{{ entry.time }}</td>
-                    <td class="right">{{ entry.values.value }}</td>
-                    <td class="right">{{ entry.values.insulin }}</td>
-                    <td class="right">{{ entry.values.BE }}</td>
-                    <td class="text-right">
-                        <a class="dropdown-toggle" href="#">
-                            <span class="icon-cog"></span>
-                        </a>
-                        <ul class="dropdown-menu" data-role="dropdown" style="display: none;">
-                            <li><a href="/index.php/delete?id={{ entry.key }}" class="danger">Delete</a></li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-    {% endfor %}
+    <tr>
+        <th class="text-left">Time</th>
+        <th class="text-left">Value</th>
+        <th class="text-left">Insulin</th>
+        <th class="text-left">BE</th>
+        <th class="text-right">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+        {%  for singleentry in entry.entries %}
+            <tr class="">
+                <td>{{ singleentry.time }}</td>
+                <td class="right">{{ singleentry.values.value }}</td>
+                <td class="right">{{ singleentry.values.insulin }}</td>
+                <td class="right">{{ singleentry.values.BE }}</td>
+                <td class="text-right">
+                    <a class="dropdown-toggle" href="#">
+                        <span class="icon-cog"></span>
+                    </a>
+                    <ul class="dropdown-menu" data-role="dropdown" style="display: none;">
+                        <li><a href="/index.php/delete?id={{ singleentry.key }}" class="danger">Delete</a></li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+
+    <svg id="graph-{{ entry.id }}"></svg>
+    <script>
+        drawGraph('#graph-{{ entry.id }}', {{ entry.grapharray|raw }});
+    </script>
+
+{% endfor %}
 
 
 
