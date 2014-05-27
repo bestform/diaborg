@@ -17,7 +17,8 @@ var drawGraph = function(selector, values){
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .orient("left");
+        .orient("left")
+        .ticks(5);
 
     var line = d3.svg.line()
         .x(function(d) { return x(d.date); })
@@ -31,12 +32,6 @@ var drawGraph = function(selector, values){
 
 
     var data = values;
-//    [
-//        {"date":"20:20", "value":"100"},
-//        {"date":"21:00", "value":"200"},
-//        {"date":"22:00", "value":"300"},
-//        {"date":"23:00", "value":"200"}
-//    ];
 
     data.forEach(function(d) {
         d.date = parseDate(d.date);
@@ -44,7 +39,9 @@ var drawGraph = function(selector, values){
     });
 
     var yextend = d3.extent(data, function(d) { return d.value; });
-    yextend = [Math.min(50, yextend[0]), Math.max(300, yextend[1])];
+    var minValue = Math.min(Number(yextend[0]), Number(yextend[1]));
+    var maxValue = Math.max(Number(yextend[0]), Number(yextend[1]));
+    yextend = [Math.min(50, minValue - 30), Math.max(300, maxValue + 30)];
 
     x.domain([parseDate("00:01"), parseDate("23:59")]);
     y.domain(yextend);
@@ -62,4 +59,35 @@ var drawGraph = function(selector, values){
         .datum(data)
         .attr("class", "line")
         .attr("d", line);
+
+
+
+
+    var dataCirclesGroup = svg.append('svg:g');
+
+    var circles = dataCirclesGroup.selectAll('.data-point')
+        .data(data);
+
+    circles
+        .enter()
+        .append('svg:circle')
+        .attr('class', 'dot')
+        .attr('fill', function() { return "#4390df"; })
+        .attr('cx', function(d) { return x(d["date"]); })
+        .attr('cy', function(d) { return y(d["value"]); })
+        .attr('r', function() { return 6; })
+        .on("mouseover", function(d) {
+            d3.select(this)
+                .attr("r", 13)
+                .attr("class", "dot-selected");
+        })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .attr("r", 6)
+                .attr("class", "dot")
+                ;
+        });
+
+
+
 }

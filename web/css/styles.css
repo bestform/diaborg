@@ -17,12 +17,22 @@
     shape-rendering: crispEdges;
 }
 
-.x.axis path {
-    display: none;
-}
+/*.x.axis path {*/
+    /*display: none;*/
+/*}*/
 
 .line {
     fill: none;
     stroke: steelblue;
     stroke-width: 1.5px;
+}
+
+.dot {
+    stroke-width: 1.5px;
+}
+
+.dot-selected {
+    fill: #4390df;
+    stroke: #ffffff;
+    stroke-width: 2.5px;
 }
