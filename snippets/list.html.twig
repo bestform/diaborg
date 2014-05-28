@@ -1,23 +1,38 @@
-{% for entry in entries %}
-<table class="table striped bordered hovered bztable">
-    <thead>
-    <tr class="info">
-        <td colspan="5">{{ entry.date }}</td>
-    </tr>
+<div class="text-left">
+    <button class="button info" onclick="$('.diaborglist').toggle();return false;">Toggle Lists</button>
+    <button class="button info" onclick="$('.diaborggraph').toggle();return false;">Toggle Graphs</button>
+    <br /><br />
 
-    <tr>
-        <th class="text-left">Time</th>
-        <th class="text-left">Value</th>
-        <th class="text-left">Insulin</th>
-        <th class="text-left">BE</th>
-        <th class="text-right">Edit</th>
-    </tr>
-    </thead>
-    <tbody>
-        {%  for singleentry in entry.entries %}
+</div>
+
+{% for entry in entries %}
+    <table class="table striped bordered hovered bztable diaborglist">
+        <thead>
+        <tr class="info">
+            <td colspan="5" class="text-bold text-shadow">{{ entry.date }}</td>
+        </tr>
+
+        {#<tr>#}
+            {#<th class="text-left"><img src="/images/glyphicons_054_clock.png" /></th>#}
+            {#<th class="text-left"><img src="/images/glyphicons_019_heart_empty.png" /></th>#}
+            {#<th class="text-left"><img src="/images/glyphicons_090_eyedropper.png" /></th>#}
+            {#<th class="text-left"><img src="/images/glyphicons_272_cake.png" /></th>#}
+            {#<th class="text-right"></th>#}
+        {#</tr>#}
+        <tr>
+            <th class="text-left text-italic text-normal">Time</th>
+            <th class="text-left text-italic text-normal">Bloodsugar</th>
+            <th class="text-left text-italic text-normal">Bolus</th>
+            <th class="text-left text-italic text-normal">BU</th>
+            <th class="text-right text-italic text-normal">Edit</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for singleentry in entry.entries %}
             <tr class="row-{{ singleentry.key }}">
                 <td>{{ singleentry.time }}</td>
-                <td class="right">{{ singleentry.value }}</td>
+                <td class="right text-bold text-shadow">{{ singleentry.value }}</td>
                 <td class="right">{{ singleentry.insulin }}</td>
                 <td class="right">{{ singleentry.BE }}</td>
                 <td class="text-right">
@@ -30,15 +45,15 @@
                 </td>
             </tr>
         {% endfor %}
-    </tbody>
+        </tbody>
     </table>
 
 
-    <svg id="graph-{{ entry.id }}"></svg>
+    <svg id="graph-{{ entry.id }}" class="diaborggraph"></svg>
     <script>
         drawGraph('#graph-{{ entry.id }}', {{ entry.bzarray|raw }}, {{ entry.insulinarray|raw }}, {{ entry.bearray|raw }});
     </script>
-
+    <br /><br /><br /><br />
 {% endfor %}
 
 
