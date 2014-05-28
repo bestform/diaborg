@@ -45,6 +45,7 @@ class DiaborgController {
             }
 
             $entries[$currentDay]['entries'][] = array(
+                "timestamp" =>  $timestamp,
                 "time" => date('H:i', $timestamp),
                 "value" => $entry->getValue(),
                 "insulin" => $entry->getInsulin(),
@@ -137,7 +138,7 @@ class DiaborgController {
             $grapharray = array();
             foreach($dayentry['entries'] as $timeentry){
                 if(!empty($timeentry['value'])){
-                    $grapharray[] = array("date"=>$timeentry['time'], "value"=>$timeentry['value']);
+                    $grapharray[] = array("date"=>$timeentry['timestamp'], "value"=>$timeentry['value'], "daystart"=>$key, "dayend"=>$key+(24*60*60));
                 }
             }
             $dayentry['grapharray'] = json_encode($grapharray);

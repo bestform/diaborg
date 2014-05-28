@@ -3,7 +3,7 @@ var drawGraph = function(selector, values){
         width = 800 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format("%H:%M").parse;
+    //var parseDate = d3.time.format("%H:%M").parse;
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -13,7 +13,11 @@ var drawGraph = function(selector, values){
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+        .tickFormat(function(d){
+            return new Date(d).format("HH:MM");
+        });
+
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -34,7 +38,7 @@ var drawGraph = function(selector, values){
     var data = values;
 
     data.forEach(function(d) {
-        d.date = parseDate(d.date);
+        d.date = d.date*1000;
         d.close = +d.value;
     });
 
@@ -43,7 +47,9 @@ var drawGraph = function(selector, values){
     var maxValue = Math.max(Number(yextend[0]), Number(yextend[1]));
     yextend = [Math.min(50, minValue - 30), Math.max(300, maxValue + 30)];
 
-    x.domain([parseDate("00:01"), parseDate("23:59")]);
+    var daystart = (data[0]['daystart'] * 1000);
+    var dayend = (data[0]['dayend'] * 1000);
+    x.domain([daystart, dayend]);
     y.domain(yextend);
 
     svg.append("g")
@@ -56,9 +62,9 @@ var drawGraph = function(selector, values){
         .call(yAxis);
 
     svg.append('rect')
-        .attr("x", x(parseDate("00:04")))
+        .attr("x", x(daystart)+2)
         .attr("y", y("170"))
-        .attr("width", x(parseDate("23:59")) - x(parseDate("00:01")))
+        .attr("width", x(dayend) - x(daystart))
         .attr("height", y("100") - y("200"))
         .attr("class", "areagood");
 
