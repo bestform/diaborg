@@ -7,6 +7,9 @@ use Silex\Application;
 
 interface DiaborgRepositoryInterface {
 
+    /**
+     * @return EntryModelInterface[]
+     */
     public function getList();
 
     public function getEntry($id);

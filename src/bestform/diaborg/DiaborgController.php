@@ -26,41 +26,36 @@ class DiaborgController {
 
     public function getList(Request $request, Application $app){
         $data = $this->getRepository($app)->getList();
-        $keys = array_keys($data);
-        sort($keys);
+
         $entries = array();
-        $id = 0;
-        $grapharray = array();
-        $lastkey = null;
-        foreach($keys as $key){
-            $date = date('d. m.', $key);
-            $dayId = $id++;
-            if(!isset($entries[$date])){
-                if(null !== $lastkey){
-                    $entries[$lastkey]['grapharray'] = json_encode($grapharray);
-                }
-                $grapharray = array();
-                $lastkey = $date;
-                $entries[$date] = array();
-                $entries[$date]['entries'] = array();
-                $entries[$date]['id'] = $dayId;
-                $entries[$date]['date'] = date('l, d. F', $key);
+        $dayId = 0;
+        foreach($data as $entry){
+            $timestamp = $entry->getTimestamp();
+            $dateTime = new \DateTime();
+            $dateTime->setTimestamp($timestamp);
+            $dateTime->setTime(0,0);
+            $currentDay = $dateTime->getTimestamp();
+            if(!isset($entries[$currentDay])){
+                //init day
+                $entries[$currentDay] = array();
+                $entries[$currentDay]['entries'] = array();
+                $entries[$currentDay]['id'] = $dayId++;
+                $entries[$currentDay]['date'] = date('l, d. F', $currentDay);
+                $entries[$currentDay]['grapharray'] = "{}";
             }
-            $entries[$date]['entries'][] = array(
-                "time" => date('H:i', $key),
-                "values" => $data[$key],
-                "key" => $key
+
+            $entries[$currentDay]['entries'][] = array(
+                "time" => date('H:i', $timestamp),
+                "value" => $entry->getValue(),
+                "insulin" => $entry->getInsulin(),
+                "BE" => $entry->getBE(),
+                "key" => $entry->getTimestamp()
             );
-            if(!empty($data[$key]['value'])){
-                $grapharray[] = array("date"=>date('H:i', $key), "value"=>$data[$key]['value']);
-            }
-
-        }
-        if(null !== $lastkey){
-            $entries[$lastkey]['grapharray'] = json_encode($grapharray);
         }
 
-        $entries = array_reverse($entries);
+        $entries = $this->augmentGraphData($entries);
+
+        //$entries = array_reverse($entries);
         /** @var \Twig_Environment $twig */
         $twig = $app['twig'];
         $content = $twig->render('list.html.twig', array("entries" => $entries));
@@ -134,6 +129,22 @@ class DiaborgController {
         }
 
         return $this->getAdd($request, $app);
+    }
+
+    private function augmentGraphData($entries)
+    {
+        foreach($entries as $key => $dayentry){
+            $grapharray = array();
+            foreach($dayentry['entries'] as $timeentry){
+                if(!empty($timeentry['value'])){
+                    $grapharray[] = array("date"=>$timeentry['time'], "value"=>$timeentry['value']);
+                }
+            }
+            $dayentry['grapharray'] = json_encode($grapharray);
+            $entries[$key] = $dayentry;
+        }
+
+        return $entries;
     }
 
 }
