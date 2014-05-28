@@ -6,7 +6,7 @@
 </div>
 
 {% for entry in entries %}
-    <table class="table striped bordered hovered bztable diaborglist">
+    <table class="table striped bordered hovered bztable">
         <thead>
         <tr class="info">
             <td colspan="5" class="text-bold text-shadow">{{ entry.date }}</td>
@@ -19,7 +19,7 @@
             {#<th class="text-left"><img src="/images/glyphicons_272_cake.png" /></th>#}
             {#<th class="text-right"></th>#}
         {#</tr>#}
-        <tr>
+        <tr class="diaborglist">
             <th class="text-left text-italic text-normal">Time</th>
             <th class="text-left text-italic text-normal">Bloodsugar</th>
             <th class="text-left text-italic text-normal">Bolus</th>
@@ -28,7 +28,7 @@
         </tr>
 
         </thead>
-        <tbody>
+        <tbody class="diaborglist">
         {% for singleentry in entry.entries %}
             <tr class="row-{{ singleentry.key }}">
                 <td>{{ singleentry.time }}</td>
