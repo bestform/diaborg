@@ -1,4 +1,4 @@
-<div class="text-left">
+<div class="text-center">
     <button class="button info" onclick="$('.diaborglist').toggle();return false;">Toggle Lists</button>
     <button class="button info" onclick="$('.diaborggraph').toggle();return false;">Toggle Graphs</button>
     <br /><br />
@@ -47,9 +47,11 @@
         {% endfor %}
         </tbody>
     </table>
+    <br /><br />
+    <div class="diaborggraph">
+        <svg id="graph-{{ entry.id }}" ></svg>
+    </div>
 
-
-    <svg id="graph-{{ entry.id }}" class="diaborggraph"></svg>
     <script>
         drawGraph('#graph-{{ entry.id }}', {{ entry.bzarray|raw }}, {{ entry.insulinarray|raw }}, {{ entry.bearray|raw }});
     </script>

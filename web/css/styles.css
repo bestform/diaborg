@@ -4,10 +4,12 @@ header {
 }
 .container {
     padding: 40px 40px 40px 40px;
+    width:1050px;
 }
 
-.metro .bztable, .metro .entryform {
-    max-width: 880px;
+.metro .bztable, .metro .entryform, .diaborggraph {
+    width: 900px;
+    margin: auto;
 }
 
 .metro .dropdown-toggle:after {
