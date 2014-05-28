@@ -138,23 +138,35 @@ class DiaborgController {
         foreach($entries as $key => $dayentry){
             $daystart = $key;
             $dayend = $key + (24 * 60 * 60);
-            $grapharray = array();
+            $bzarray = array();
+            $insulinarray = array();
+            $bearray = array();
             $lastValueOfDayBefore = $this->getBorderValue($entries, $key, true);
             if(null !== $lastValueOfDayBefore){
-                $grapharray[] = array("date"=>$lastValueOfDayBefore['timestamp'], "value"=>$lastValueOfDayBefore['value'], "daystart"=> $daystart, "dayend"=> $dayend);
+                $bzarray[] = array("date"=>$lastValueOfDayBefore['timestamp'], "value"=>$lastValueOfDayBefore['value'], "daystart"=> $daystart, "dayend"=> $dayend);
             }
             foreach($dayentry['entries'] as $timeentry){
                 if(!empty($timeentry['value'])){
-                    $grapharray[] = array("date"=>$timeentry['timestamp'], "value"=>$timeentry['value'], "daystart"=> $daystart, "dayend"=> $dayend);
-
+                    $bzarray[] = array("date"=>$timeentry['timestamp'], "value"=>$timeentry['value'], "daystart"=> $daystart, "dayend"=> $dayend, "key" => $timeentry["key"]);
                 }
+                if(!empty($timeentry['insulin'])){
+                    $insulinarray[] = array("date"=>$timeentry['timestamp'], "insulin" => $timeentry['insulin'], "key" => $timeentry["key"]);
+                }
+                if(!empty($timeentry['BE'])){
+                    $bearray[] = array("date"=>$timeentry['timestamp'], "BE" => $timeentry["BE"], "key" => $timeentry["key"]);
+                }
+
             }
             $nextValue = $this->getBorderValue($entries, $key, false);
             if(null !== $nextValue){
-                $grapharray[] = array("date"=>$nextValue['timestamp'], "value"=>$nextValue['value'], "daystart"=> $daystart, "dayend"=> $dayend);
+                $bzarray[] = array("date"=>$nextValue['timestamp'], "value"=>$nextValue['value'], "daystart"=> $daystart, "dayend"=> $dayend);
             }
-            $dayentry['grapharray'] = json_encode($grapharray);
+            $dayentry['bzarray'] = json_encode($bzarray);
+            $dayentry['insulinarray'] = json_encode($insulinarray);
+            $dayentry['bearray'] = json_encode($bearray);
+
             $entries[$key] = $dayentry;
+
         }
 
         return $entries;

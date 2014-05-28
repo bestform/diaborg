@@ -44,3 +44,27 @@
 .axisbackground {
     fill: #ffffff;
 }
+
+.insulin {
+    fill: #ffbf8b;
+    opacity: 0.5;
+}
+
+.insulin-selected {
+    fill: #ffbf8b;
+    opacity: 1;
+}
+
+.be {
+    fill: #ff7ceb;
+    opacity: 0.5;
+}
+
+.be-selected {
+    fill: #ff7ceb;
+    opacity: 1;
+}
+
+.markRow {
+    background-color: rgba(123, 186, 35, 0.47) !important;
+}

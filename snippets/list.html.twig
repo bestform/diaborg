@@ -15,7 +15,7 @@
     </thead>
     <tbody>
         {%  for singleentry in entry.entries %}
-            <tr class="">
+            <tr class="row-{{ singleentry.key }}">
                 <td>{{ singleentry.time }}</td>
                 <td class="right">{{ singleentry.value }}</td>
                 <td class="right">{{ singleentry.insulin }}</td>
@@ -36,7 +36,7 @@
 
     <svg id="graph-{{ entry.id }}"></svg>
     <script>
-        drawGraph('#graph-{{ entry.id }}', {{ entry.grapharray|raw }});
+        drawGraph('#graph-{{ entry.id }}', {{ entry.bzarray|raw }}, {{ entry.insulinarray|raw }}, {{ entry.bearray|raw }});
     </script>
 
 {% endfor %}
