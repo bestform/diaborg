@@ -44,7 +44,7 @@ class DiaborgController {
                 $entries[$date] = array();
                 $entries[$date]['entries'] = array();
                 $entries[$date]['id'] = $dayId;
-                $entries[$date]['date'] = $date;
+                $entries[$date]['date'] = date('l, d. F', $key);
             }
             $entries[$date]['entries'][] = array(
                 "time" => date('H:i', $key),
