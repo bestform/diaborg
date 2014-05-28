@@ -55,6 +55,13 @@ var drawGraph = function(selector, values){
         .attr("class", "y axis")
         .call(yAxis);
 
+    svg.append('rect')
+        .attr("x", x(parseDate("00:04")))
+        .attr("y", y("170"))
+        .attr("width", x(parseDate("23:59")) - x(parseDate("00:01")))
+        .attr("height", y("100") - y("200"))
+        .attr("class", "areagood");
+
     svg.append("path")
         .datum(data)
         .attr("class", "line")
