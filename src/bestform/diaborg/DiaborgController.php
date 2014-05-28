@@ -134,18 +134,57 @@ class DiaborgController {
 
     private function augmentGraphData($entries)
     {
+        $days = array_keys($entries);
         foreach($entries as $key => $dayentry){
+            $daystart = $key;
+            $dayend = $key + (24 * 60 * 60);
             $grapharray = array();
+            $lastValueOfDayBefore = $this->getBorderValue($entries, $key, true);
+            if(null !== $lastValueOfDayBefore){
+                $grapharray[] = array("date"=>$lastValueOfDayBefore['timestamp'], "value"=>$lastValueOfDayBefore['value'], "daystart"=> $daystart, "dayend"=> $dayend);
+            }
             foreach($dayentry['entries'] as $timeentry){
                 if(!empty($timeentry['value'])){
-                    $grapharray[] = array("date"=>$timeentry['timestamp'], "value"=>$timeentry['value'], "daystart"=>$key, "dayend"=>$key+(24*60*60));
+                    $grapharray[] = array("date"=>$timeentry['timestamp'], "value"=>$timeentry['value'], "daystart"=> $daystart, "dayend"=> $dayend);
+
                 }
+            }
+            $nextValue = $this->getBorderValue($entries, $key, false);
+            if(null !== $nextValue){
+                $grapharray[] = array("date"=>$nextValue['timestamp'], "value"=>$nextValue['value'], "daystart"=> $daystart, "dayend"=> $dayend);
             }
             $dayentry['grapharray'] = json_encode($grapharray);
             $entries[$key] = $dayentry;
         }
 
         return $entries;
+    }
+
+    private function getBorderValue($entries, $key, $before = true)
+    {
+        $entryKeys = array_keys($entries);
+        $foundEntry = null;
+        if(!$before){
+            $entryKeys = array_reverse($entryKeys);
+        }
+
+        foreach($entryKeys as $entrykey){
+            if($entrykey === $key){
+                $entryWithValue = null;
+                if(!$before){
+                    $foundEntry['entries'] = array_reverse($foundEntry['entries']);
+                }
+                foreach($foundEntry['entries'] as $dayEntry){
+                    if(!empty($dayEntry['value'])){
+                        $entryWithValue = $dayEntry;
+                    }
+                }
+                return $entryWithValue;
+            }
+            $foundEntry = $entries[$entrykey];
+        }
+
+        return null;
     }
 
 }

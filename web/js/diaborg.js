@@ -25,6 +25,7 @@ var drawGraph = function(selector, values){
         .ticks(5);
 
     var line = d3.svg.line()
+        .interpolate('monotone')
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.value); });
 
@@ -52,15 +53,6 @@ var drawGraph = function(selector, values){
     x.domain([daystart, dayend]);
     y.domain(yextend);
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
     svg.append('rect')
         .attr("x", x(daystart)+2)
         .attr("y", y("170"))
@@ -72,9 +64,6 @@ var drawGraph = function(selector, values){
         .datum(data)
         .attr("class", "line")
         .attr("d", line);
-
-
-
 
     var dataCirclesGroup = svg.append('svg:g');
 
@@ -98,8 +87,26 @@ var drawGraph = function(selector, values){
             d3.select(this)
                 .attr("r", 6)
                 .attr("class", "dot")
-                ;
+            ;
         });
+
+
+    svg.append("rect")
+        .attr("x", -1 * margin.left)
+        .attr("y", 0)
+        .attr("width", margin.left)
+        .attr("height", height)
+        .attr("class", "axisbackground");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
 
 
 
