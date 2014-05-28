@@ -1,3 +1,7 @@
+header {
+    height: 45px;
+    position: relative;
+}
 .container {
     padding: 40px 40px 40px 40px;
 }
