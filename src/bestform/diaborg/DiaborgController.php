@@ -56,7 +56,7 @@ class DiaborgController {
 
         $entries = $this->augmentGraphData($entries);
 
-        //$entries = array_reverse($entries);
+        $entries = array_reverse($entries);
         /** @var \Twig_Environment $twig */
         $twig = $app['twig'];
         $content = $twig->render('list.html.twig', array("entries" => $entries));
@@ -187,6 +187,13 @@ class DiaborgController {
                 foreach($foundEntry['entries'] as $dayEntry){
                     if(!empty($dayEntry['value'])){
                         $entryWithValue = $dayEntry;
+                    }
+                }
+                if(null !== $entryWithValue){
+                    $timestamp1 = $entryWithValue['timestamp'];
+                    $timestamp2 = $key;
+                    if(abs($timestamp1 - $timestamp2) > 24*60*60*2){
+                        $entryWithValue = null;
                     }
                 }
                 return $entryWithValue;
