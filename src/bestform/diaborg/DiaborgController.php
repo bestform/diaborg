@@ -181,6 +181,9 @@ class DiaborgController {
         foreach($entryKeys as $entrykey){
             if($entrykey === $key){
                 $entryWithValue = null;
+                if(null === $foundEntry){
+                    return null;
+                }
                 if(!$before){
                     $foundEntry['entries'] = array_reverse($foundEntry['entries']);
                 }
