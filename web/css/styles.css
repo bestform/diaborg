@@ -68,3 +68,7 @@
 .markRow {
     background-color: rgba(123, 186, 35, 0.47) !important;
 }
+
+.calendar-actions {
+    display: none;
+}

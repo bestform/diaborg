@@ -81,9 +81,7 @@ class DiaborgController {
     public function getAdd(Request $request, Application $app)
     {
         $vars = array(
-            "year" => $request->get("year"),
-            "month" => $request->get("month"),
-            "day" => $request->get("day")
+            "date" => $request->get("date")
         );
         // we want to render additional fields again, should an error occur
         if(isset($app['errors'])){
@@ -117,8 +115,8 @@ class DiaborgController {
             }
             $app['errors'] = $apperrors;
         } else {
-            $date = new \DateTime();
-            $date->setDate($request->get("year"), $request->get("month"), $request->get("day"));
+            $dateString = $request->get("date");
+            $date = new \DateTime($dateString);
             $date->setTime($request->get("hour"), $request->get("minute"));
             $timestamp = $date->getTimestamp();
             $this->getRepository($app)->addEntry(

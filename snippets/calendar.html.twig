@@ -1,0 +1,18 @@
+<div class="calendar diaborgcalendar" ></div>
+
+{% include 'formfield.html.twig' with {'label' : 'Date', 'id' : id, 'value' : date, 'error' : error, 'type':'hidden'} %}
+
+<script>
+    $(function(){
+        var cal = $(".diaborgcalendar").calendar({
+            multiSelect: false,
+            weekStart: 1,
+            click: function(d){
+                var out = $("#{{ id }}").attr('value', d);
+            }
+        });
+        {% if date %}
+        cal.calendar('setDate', '{{ date }}');
+        {% endif %}
+    })
+</script>

@@ -1,5 +1,5 @@
 <div class="input-control text {% if error %}error-state{% endif %}" data-role="input-control">
-    <input type="text" id="{{ id }}" name="{{ id }}" value="{{ value }}" {% if autofocus %}autofocus="autofocus"{% endif %} placeholder="{{ label }}">
+    <input type="{% if type %}{{ type }}{% else %}text{% endif %}" id="{{ id }}" name="{{ id }}" value="{{ value }}" {% if autofocus %}autofocus="autofocus"{% endif %} placeholder="{{ label }}">
     <button class="btn-clear" tabindex="-1" type="button"></button>
     <span class="help-inline">{{ error }}</span>
 </div>
