@@ -108,11 +108,18 @@ function drawBE(svg, meta, x, y, h) {
     ;
 }
 
-function drawAxis(svg, margin, height, xAxis, yAxis) {
+function drawAxis(svg, margin, height, width, xAxis, yAxis) {
     svg.append("rect")
         .attr("x", -1 * margin.left)
         .attr("y", 0)
         .attr("width", margin.left)
+        .attr("height", height)
+        .attr("class", "axisbackground");
+
+    svg.append("rect")
+        .attr("x", width)
+        .attr("y", 0)
+        .attr("width", margin.right)
         .attr("height", height)
         .attr("class", "axisbackground");
 
@@ -131,17 +138,52 @@ function drawPath(svg, data, line) {
         .attr("class", "line")
         .attr("d", line);
 }
-function drawBackground(svg, x, daystart, y, dayend) {
+function drawBackground(svg, x, daystart, y, dayend, width, height) {
     svg.append('rect')
         .attr("x", x(daystart) + 2)
         .attr("y", y("170"))
         .attr("width", x(dayend) - x(daystart))
         .attr("height", y("100") - y("200"))
         .attr("class", "areagood");
+
+
+
+    var make_x_axis = function() {
+      return d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+          .ticks(10)
+    }
+
+    var make_y_axis = function() {
+      return d3.svg.axis()
+          .scale(y)
+          .orient("left")
+          .ticks(10)
+    }
+
+    svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("opacity", "0.3")
+        .call(make_x_axis()
+            .tickSize(-height, 0, 0)
+            .tickFormat("")
+        )
+
+    svg.append("g")
+        .attr("class", "grid")
+        .attr("opacity", "0.3")
+        .call(make_y_axis()
+            .tickSize(-width, 0, 0)
+            .tickFormat("")
+        )
+
+
 }
 var drawGraph = function(selector, values, insulin, be){
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 800 - margin.left - margin.right,
+        width = 900 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom;
 
     //var parseDate = d3.time.format("%H:%M").parse;
@@ -163,13 +205,14 @@ var drawGraph = function(selector, values, insulin, be){
         .orient("bottom")
         .tickFormat(function(d){
             return new Date(d).format("HH:MM");
-        });
+        })
+        .ticks(10);
 
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
-        .ticks(5);
+        .ticks(10);
 
     var line = d3.svg.line()
         .interpolate('monotone')
@@ -207,12 +250,12 @@ var drawGraph = function(selector, values, insulin, be){
     x.domain([daystart, dayend]);
     y.domain(yextend);
 
-    drawBackground(svg, x, daystart, y, dayend);
+    drawBackground(svg, x, daystart, y, dayend, width, height);
     drawInsulin(svg, insulin, x, insy, insh);
     drawBE(svg, be, x, insy, insh);
     drawPath(svg, values, line);
 
     drawCircles(svg, values, x, y);
 
-    drawAxis(svg, margin, height, xAxis, yAxis);
+    drawAxis(svg, margin, height, width, xAxis, yAxis);
 }

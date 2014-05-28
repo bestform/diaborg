@@ -3,7 +3,7 @@
 }
 
 .metro .bztable, .metro .entryform {
-    max-width: 800px;
+    max-width: 880px;
 }
 
 .metro .dropdown-toggle:after {
@@ -71,4 +71,11 @@
 
 .calendar-actions {
     display: none;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+}
+.grid path {
+    stroke-width: 0;
 }
